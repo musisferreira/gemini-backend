@@ -11,7 +11,7 @@ import { GeminiService } from './gemini.service';
 import { BasicPromptDto, chatPromptDto } from './dtos/basic-prompt.dto';
 import { Response } from 'express';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { GeneratorContentResponse } from '@google/genai';
+
 import { ChatPromptDto } from './dtos/chat-prompt.dto';
 
 
