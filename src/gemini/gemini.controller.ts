@@ -1,3 +1,4 @@
+import { GenerateContentResponse } from '@google/genai';
 import {
     Body,
     Controller ,
@@ -6,20 +7,23 @@ import {
       Post,
       UseInterceptors,
        UploadedFiles,
+
         } from '@nestjs/common';
 import { GeminiService } from './gemini.service';
-import { BasicPromptDto, chatPromptDto } from './dtos/basic-prompt.dto';
+import { BasicPromptDto, } from './dtos/basic-prompt.dto';
 import { Response } from 'express';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { ChatPromptDto } from './dtos/chat-prompt.dto';
 
 
+
+
 @Controller('gemini')
 export class GeminiController {
   constructor(private readonly geminiService: GeminiService) {}
 
-  outputStreamResponse(res: Response, stream: AsyncGenerator<GeneratorContentResponse, any, any>)async{
+  async outputStreamResponse(res: Response, stream: AsyncGenerator<GenerateContentResponse, any, any>){
 
               //const stream = await this.geminiService.basicPromptStream(basicPromptDto);
              //res.setHeader('Content-Type', 'application/json');
@@ -53,7 +57,6 @@ export class GeminiController {
    @Post('basic-prompt-stream')
    @UseInterceptors(FilesInterceptor('files'))
     async basicPromptStream(
-
          @Body() basicPromptDto: BasicPromptDto,
          @Res() res: Response,
          @UploadedFiles() files: Array<Express.Multer.File>,
@@ -63,18 +66,7 @@ export class GeminiController {
      ){
          basicPromptDto.files = files;
          const stream = await this.geminiService.basicPromptStream(basicPromptDto);
-         //res.setHeader('Content-Type', 'application/json');
-         res.setHeader('Content-Type', 'text/plain');
-         res.status(HttpStatus.OK);
-
-         for await (const chunk of stream){
-
-             const piece = chunk.text;
-             console.log(piece);
-             res.write(piece);
-             }
-
-         res.end();
+       void this.outputStreamResponse(res,stream);
 
         }
 
@@ -90,10 +82,11 @@ export class GeminiController {
              // TODO: files.
          ){
              chatPromptDto.files = files;
-             const stream = await this.geminiService.basicPromptStream(chatPromptDto);
+             const stream = await this.geminiService.chatStream(chatPromptDto);
 
 
              const data = await this.outputStreamResponse(res, stream);
+             console.log({text: chatPromptDto.prompt});
              console.log({data});
 
             }

@@ -3,6 +3,9 @@ import { BasicPromptDto } from './dtos/basic-prompt.dto';
 import { GoogleGenAI } from "@google/genai";
 import { basicPromptUseCase } from './use-cases/basic-prompt.use-case';
 import { basicPromptStreamUseCase } from './use-cases/basic-prompt-stream.use-case';
+import { chatPromptStreamUseCase } from './use-cases/chat-prompt-stream.use-case';
+import { ChatPromptDto } from './dtos/chat-prompt.dto';
+
 
 @Injectable()
 export class GeminiService {
@@ -15,6 +18,11 @@ export class GeminiService {
     async basicPromptStream(basicPromptDto: BasicPromptDto){
 
             return basicPromptStreamUseCase(this.ai, basicPromptDto);
+            }
+
+
+        async chatStream(chatPromptDto: ChatPromptDto){
+            return chatPromptStreamUseCase(this.ai, chatPromptDto);
             }
 
     }
