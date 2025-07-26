@@ -1,6 +1,6 @@
 import { GoogleGenAI, createPartFromUri, createUserContent } from "@google/genai";
 import { BasicPromptDto } from '../dtos/basic-prompt.dto';
-import { uploadedFiles } from '../helpers/gemini-upload-file';
+import { geminiUploadFiles } from '../helpers/gemini-upload-file';
 
 interface Options{
     model?: string;
@@ -14,7 +14,7 @@ export const basicPromptStreamUseCase = async (
     ) => {
         const { prompt, files = [] } = basicPromptDto;
 
-        const image = await uploadedFiles(ai, files);
+        const image = await geminiUploadFiles(ai, files);
 
         const { model = 'gemini-2.0-flash',
                 systemInstruction = `responde unicamente en espanol,

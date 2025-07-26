@@ -1,5 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 
+
 const fileMimeTypesByExtension = {
   jpg: 'image/jpg',
   jpeg: 'image/jpeg',
